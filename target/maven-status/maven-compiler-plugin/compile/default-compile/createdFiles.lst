@@ -564,6 +564,7 @@ name\lsg\MySqlParser$AlterByReorganizePartitionContext.class
 name\lsg\MySqlParser$SetAutocommitContext.class
 name\lsg\MySqlParser$AlterByRepairPartitionContext.class
 name\lsg\MySqlParser$TableSourceContext.class
+name\lsg\utils\FileUtil.class
 name\lsg\MySqlParser$LengthOneDimensionContext.class
 name\lsg\MySqlParser$UpdateStatementContext.class
 name\lsg\MySqlParser$TableOptionContext.class

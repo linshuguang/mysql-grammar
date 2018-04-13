@@ -1,6 +1,7 @@
 import name.lsg.grammar.AST;
 import name.lsg.grammar.definition.CreateDefinition;
 import name.lsg.grammar.statement.CreateTable;
+import name.lsg.utils.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -15,17 +16,13 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * Created by kenya on 2018/3/18.
  */
-@ContextConfiguration(locations = {"classpath:applicationContext_mifi_staging.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class TestCompiler {
 
     @Test
-    public void testSql() throws Exception {
-        String path = null;
-        path = "src/test/resources/trade_quality.sql";
-        //path = "src/test/resources/test.sql";
-        File file = new File(path);
+    public void testCreateTable() throws Exception {
 
-        String sql = FileUtils.readFileToString(file);
+        String sql = FileUtil.readContent("/case1_create_table.sql");
 
         Set<String> uniqueKeySet = new HashSet<>();
         Compiler compiler = new Compiler();

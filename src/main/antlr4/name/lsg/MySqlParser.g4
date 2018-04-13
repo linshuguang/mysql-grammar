@@ -201,7 +201,7 @@ createServer
 
 createTable returns [CreateTable value]
     @init{ $value = new CreateTable();  }
-    : CREATE TEMPORARY? TABLE ifNotExists? 
+    : CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists $value.markAsIfNotExists();)?
        tableName 
        (
          LIKE tableName 

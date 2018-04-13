@@ -5,6 +5,7 @@ e:\project\mysql-grammar\src\main\java\name\lsg\grammar\Compiler.java
 e:\project\mysql-grammar\target\generated-sources\antlr4\name\lsg\MySqlParser.java
 e:\project\mysql-grammar\src\main\java\name\lsg\grammar\definition\IndexColumnDefinition.java
 e:\project\mysql-grammar\src\main\java\name\lsg\grammar\definition\IndexColumnName.java
+e:\project\mysql-grammar\src\main\java\name\lsg\utils\FileUtil.java
 e:\project\mysql-grammar\src\main\java\name\lsg\grammar\statement\Statement.java
 e:\project\mysql-grammar\src\main\java\name\lsg\grammar\statement\DDLStatement.java
 e:\project\mysql-grammar\src\main\java\name\lsg\grammar\AST.java
