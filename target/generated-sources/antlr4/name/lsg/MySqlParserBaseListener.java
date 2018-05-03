@@ -10,6 +10,7 @@ package name.lsg;
   import name.lsg.grammar.id.*;
   import name.lsg.grammar.definition.*;
   import name.lsg.grammar.constraint.*;
+  import name.lsg.grammar.engine.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;

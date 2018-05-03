@@ -41,6 +41,7 @@ options {
   import name.lsg.grammar.id.*;
   import name.lsg.grammar.definition.*;
   import name.lsg.grammar.constraint.*;
+  import name.lsg.grammar.engine.*;
 }
 
 // Top Level Description
@@ -209,7 +210,7 @@ createTable returns [CreateTable value]
        )                                                            #copyCreateTable
     | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
        tableName createDefinitions?
-       ( t=tableOption { /*$value.addTableOption($t.value);*/ } (','? t=tableOption { /* $value.addTableOption($t.value);*/ })* )?
+       ( to=tableOption { $value.addTableOption($to.value); } (','? to=tableOption {  $value.addTableOption($to.value); })* )?
        partitionDefinitions? keyViolate=(IGNORE | REPLACE)?
        AS? selectStatement                                          #queryCreateTable
     | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
@@ -420,36 +421,37 @@ indexColumnDefinition returns [IndexColumnDefinition value]
       indexColumnNames indexOption*                                // #specialIndexDeclaration
     ;
 
-tableOption  returns [AST value]
-    : ENGINE '='? engineName                                        #tableOptionEngine
-    | AUTO_INCREMENT '='? decimalLiteral                            #tableOptionAutoIncrement
-    | AVG_ROW_LENGTH '='? decimalLiteral                            #tableOptionAverage
-    | DEFAULT? (CHARACTER SET | CHARSET) '='? charsetName           #tableOptionCharset
-    | CHECKSUM '='? boolValue=('0' | '1')                           #tableOptionChecksum
-    | DEFAULT? COLLATE '='? collationName                           #tableOptionCollate
-    | COMMENT '='? STRING_LITERAL                                   #tableOptionComment
-    | COMPRESSION '='? STRING_LITERAL                               #tableOptionCompression
-    | CONNECTION '='? STRING_LITERAL                                #tableOptionConnection
-    | DATA DIRECTORY '='? STRING_LITERAL                            #tableOptionDataDirectory
-    | DELAY_KEY_WRITE '='? boolValue=('0' | '1')                    #tableOptionDelay
-    | ENCRYPTION '='? STRING_LITERAL                                #tableOptionEncryption
-    | INDEX DIRECTORY '='? STRING_LITERAL                           #tableOptionIndexDirectory
-    | INSERT_METHOD '='? insertMethod=(NO | FIRST | LAST)           #tableOptionInsertMethod
-    | KEY_BLOCK_SIZE '='? fileSizeLiteral                           #tableOptionKeyBlockSize
-    | MAX_ROWS '='? decimalLiteral                                  #tableOptionMaxRows
-    | MIN_ROWS '='? decimalLiteral                                  #tableOptionMinRows
-    | PACK_KEYS '='? extBoolValue=('0' | '1' | DEFAULT)             #tableOptionPackKeys
-    | PASSWORD '='? STRING_LITERAL                                  #tableOptionPassword
+tableOption  returns [TableOption value]
+    @init{ $value = new TableOption();  }
+    : ENGINE '='? e=engineName { $value.markAsEngine(); $value.param = $e.value; }  #tableOptionEngine
+    | AUTO_INCREMENT '='? e=decimalLiteral { $value.markAsAutoIncrement(); $value.param = $e.value; }                           #tableOptionAutoIncrement
+    | AVG_ROW_LENGTH '='? e=decimalLiteral   { $value.markAsAvgRowLength(); $value.param = $e.value; }                         #tableOptionAverage
+    | DEFAULT? (CHARACTER SET | CHARSET) '='? e=charsetName  { $value.markAsCharsetName(); $value.param = $e.value; }         #tableOptionCharset
+    | CHECKSUM '='? boolValue=('0' | '1')   { $value.markAsChecksum(); $value.paramStr = $boolValue.text; }                          #tableOptionChecksum
+    | DEFAULT? COLLATE '='? e=collationName   { $value.markAsCollationName(); $value.param = $e.value; }                        #tableOptionCollate
+    | COMMENT '='? e=STRING_LITERAL  { $value.markAsComment(); $value.paramStr = $e.text; }                                  #tableOptionComment
+    | COMPRESSION '='? e=STRING_LITERAL { $value.markAsCompression(); $value.paramStr = $e.text; }                               #tableOptionCompression
+    | CONNECTION '='? e=STRING_LITERAL { $value.markAsConnection(); $value.paramStr = $e.text; }                                #tableOptionConnection
+    | DATA DIRECTORY '='? e=STRING_LITERAL { $value.markAsDataDirectory(); $value.paramStr = $e.text; }                            #tableOptionDataDirectory
+    | DELAY_KEY_WRITE '='? boolValue=('0' | '1') { $value.markAsDelayKeyWrite(); $value.paramStr = $boolValue.text; }                    #tableOptionDelay
+    | ENCRYPTION '='? e=STRING_LITERAL    { $value.markAsEncryption(); $value.paramStr = $e.text; }                             #tableOptionEncryption
+    | INDEX DIRECTORY '='? e=STRING_LITERAL { $value.markAsIndexDirectory(); $value.paramStr = $e.text; }                           #tableOptionIndexDirectory
+    | INSERT_METHOD '='? insertMethod=(NO | FIRST | LAST){ $value.markAsInsertMethod(); $value.paramStr = $insertMethod.text; }            #tableOptionInsertMethod
+    | KEY_BLOCK_SIZE '='? e=fileSizeLiteral   { $value.markAsKeyBlockSize(); $value.param = $e.value; }                         #tableOptionKeyBlockSize
+    | MAX_ROWS '='? e=decimalLiteral  { $value.markAsMaxRows(); $value.param = $e.value; }                                 #tableOptionMaxRows
+    | MIN_ROWS '='? e=decimalLiteral   { $value.markAsMinRows(); $value.param = $e.value; }                                #tableOptionMinRows
+    | PACK_KEYS '='? extBoolValue=('0' | '1' | DEFAULT)  { $value.markAsPackKeys(); $value.paramStr = $extBoolValue.text; }             #tableOptionPackKeys
+    | PASSWORD '='? e=STRING_LITERAL   { $value.markAsPassword(); $value.paramStr = $e.text; }                                #tableOptionPassword
     | ROW_FORMAT '='? 
         rowFormat=(
           DEFAULT | DYNAMIC | FIXED | COMPRESSED
           | REDUNDANT | COMPACT
-        )                                                           #tableOptionRowFormat
-    | STATS_AUTO_RECALC '='? extBoolValue=(DEFAULT | '0' | '1')     #tableOptionRecalculation
-    | STATS_PERSISTENT '='? extBoolValue=(DEFAULT | '0' | '1')      #tableOptionPersistent
-    | STATS_SAMPLE_PAGES '='? decimalLiteral                        #tableOptionSamplePage
-    | TABLESPACE uid tablespaceStorage?                             #tableOptionTablespace
-    | UNION '='? '(' tables ')'                                     #tableOptionUnion
+        )     {$value.markAsRowFormat();  $value.param = new RowFormat($rowFormat.text);}          #tableOptionRowFormat
+    | STATS_AUTO_RECALC '='? extBoolValue=(DEFAULT | '0' | '1') { $value.markAsStatsAutoRecalc(); $value.paramStr = $extBoolValue.text; }      #tableOptionRecalculation
+    | STATS_PERSISTENT '='? extBoolValue=(DEFAULT | '0' | '1'){ $value.markAsStatsPersistent(); $value.paramStr = $extBoolValue.text; }        #tableOptionPersistent
+    | STATS_SAMPLE_PAGES '='? e=decimalLiteral { $value.markAsStatsSamplePages(); $value.param = $e.value; }                       #tableOptionSamplePage
+    | TABLESPACE u=uid tablespaceStorage?  { $value.markAsTableSpace(); $value.param = $u.value; }                              #tableOptionTablespace
+    | UNION '='? '(' tables ')'  { $value.markAsUNION();  }                                      #tableOptionUnion
     ;
 
 tablespaceStorage
@@ -1880,19 +1882,19 @@ mysqlVariable
     | GLOBAL_ID
     ;
 
-charsetName
-    : BINARY
-    | charsetNameBase
-    | STRING_LITERAL
-    | CHARSET_REVERSE_QOUTE_STRING
+charsetName returns [ AST value]
+    : b=BINARY { $value = new CharsetName($b.text);}
+    | cb=charsetNameBase { $value = $cb.value; }
+    | s=STRING_LITERAL { $value = new CharsetName($s.text);}
+    | c=CHARSET_REVERSE_QOUTE_STRING { $value = new CharsetName($c.text);}
     ;
 
-collationName
-    : uid | STRING_LITERAL;
+collationName returns [ AST value]
+    : uid { $value = $uid.value;} | s=STRING_LITERAL { $value = new ID($s.text);};
 
-engineName
-    : ARCHIVE | BLACKHOLE | CSV | FEDERATED | INNODB | MEMORY 
-    | MRG_MYISAM | MYISAM | NDB | NDBCLUSTER | PERFOMANCE_SCHEMA
+engineName returns [AST value]
+    : name=(ARCHIVE | BLACKHOLE | CSV | FEDERATED | INNODB | MEMORY
+    | MRG_MYISAM | MYISAM | NDB | NDBCLUSTER | PERFOMANCE_SCHEMA) { $value = new EngineName($name.text);}
     ;
 
 uuidSet
@@ -1946,12 +1948,12 @@ dottedId
 
 //    Literals
 
-decimalLiteral
-    : DECIMAL_LITERAL | ZERO_DECIMAL | ONE_DECIMAL | TWO_DECIMAL
+decimalLiteral returns [ AST value]
+    : l=(DECIMAL_LITERAL | ZERO_DECIMAL | ONE_DECIMAL | TWO_DECIMAL) { $value = new DecimalLiteral($l.text); }
     ;
 
-fileSizeLiteral
-    : FILESIZE_LITERAL | decimalLiteral;
+fileSizeLiteral returns [ AST value]
+    : FILESIZE_LITERAL | d=decimalLiteral { $value = $d.value;};
 
 stringLiteral
     : (
@@ -2319,13 +2321,13 @@ mathOperator
 //    Simple id sets
 //     (that keyword, which can be id)
 
-charsetNameBase
-    : ARMSCII8 | ASCII | BIG5 | CP1250 | CP1251 | CP1256 | CP1257
+charsetNameBase returns [ AST value]
+    : n=(ARMSCII8 | ASCII | BIG5 | CP1250 | CP1251 | CP1256 | CP1257
     | CP850 | CP852 | CP866 | CP932 | DEC8 | EUCJPMS | EUCKR 
     | GB2312 | GBK | GEOSTD8 | GREEK | HEBREW | HP8 | KEYBCS2 
     | KOI8R | KOI8U | LATIN1 | LATIN2 | LATIN5 | LATIN7 | MACCE
     | MACROMAN | SJIS | SWE7 | TIS620 | UCS2 | UJIS | UTF16 
-    | UTF16LE | UTF32 | UTF8 | UTF8MB3 | UTF8MB4
+    | UTF16LE | UTF32 | UTF8 | UTF8MB3 | UTF8MB4) {$value = new CharsetNameBase($n.text);}
     ;
 
 transactionLevelBase

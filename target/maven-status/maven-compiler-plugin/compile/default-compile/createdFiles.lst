@@ -15,7 +15,6 @@ name\lsg\MySqlParser$TableOptionPasswordContext.class
 name\lsg\MySqlParser$EmptyStatementContext.class
 name\lsg\MySqlParser$PrivilegesBaseContext.class
 name\lsg\MySqlParser$StopGroupReplicationContext.class
-name\lsg\grammar\enums\EColumnConstraint.class
 name\lsg\MySqlParser$DimensionDataTypeContext.class
 name\lsg\MySqlParser$InnerJoinContext.class
 name\lsg\MySqlParser$GtidsUntilOptionContext.class
@@ -43,6 +42,7 @@ name\lsg\MySqlParser$SubPartitionFunctionKeyContext.class
 name\lsg\MySqlParser$CreateUserMysqlV56Context.class
 name\lsg\MySqlParser$TablePairContext.class
 name\lsg\MySqlParser$PasswordFunctionCallContext.class
+name\lsg\grammar\definition\CharsetName.class
 name\lsg\MySqlParser$TableOptionAverageContext.class
 name\lsg\MySqlParser$IfExistsContext.class
 name\lsg\MySqlParser$IntervalTypeBaseContext.class
@@ -87,6 +87,7 @@ name\lsg\MySqlParser$OuterJoinContext.class
 name\lsg\MySqlParser$PasswordAuthOptionContext.class
 name\lsg\MySqlParser$AlterFunctionContext.class
 name\lsg\MySqlParser$StringMasterOptionContext.class
+name\lsg\grammar\model\TableOptionEnum.class
 name\lsg\MySqlParser$FlushStatementContext.class
 name\lsg\MySqlParser$PartitionDefinitionContext.class
 name\lsg\MySqlParser$DecimalLiteralContext.class
@@ -208,6 +209,7 @@ name\lsg\MySqlParser$AlterProcedureContext.class
 name\lsg\MySqlParser$HandlerReadIndexStatementContext.class
 name\lsg\MySqlParser$ShowGlobalInfoClauseContext.class
 name\lsg\MySqlParser$ShowProfileTypeContext.class
+name\lsg\grammar\definition\DecimalLiteral.class
 name\lsg\MySqlParser$LengthTwoDimensionContext.class
 name\lsg\MySqlParser$LogicalExpressionContext.class
 name\lsg\MySqlParser$BoolMasterOptionContext.class
@@ -254,6 +256,7 @@ name\lsg\MySqlParser$MasterLogUntilOptionContext.class
 name\lsg\MySqlParser$ScalarFunctionCallContext.class
 name\lsg\MySqlParser$KeywordsCanBeIdContext.class
 name\lsg\MySqlParser$HashAuthOptionContext.class
+name\lsg\grammar\model\EColumnConstraint.class
 name\lsg\MySqlParser$UtilityStatementContext.class
 name\lsg\grammar\definition\IndexColumnName.class
 name\lsg\MySqlParser$DataTypeContext.class
@@ -342,6 +345,7 @@ name\lsg\MySqlParser$IndexHintContext.class
 name\lsg\MySqlParser$AlterByDiscardTablespaceContext.class
 name\lsg\MySqlParser$ReturnStatementContext.class
 name\lsg\MySqlParser$TableOptionMinRowsContext.class
+name\lsg\grammar\definition\RowFormat.class
 name\lsg\MySqlParser$TableIndexesContext.class
 name\lsg\MySqlParser$PartitionFunctionDefinitionContext.class
 name\lsg\MySqlParser$FunctionParameterContext.class
@@ -381,6 +385,7 @@ name\lsg\MySqlParser$RenameTableClauseContext.class
 name\lsg\MySqlParser$SimpleIdContext.class
 name\lsg\MySqlParser$StraightJoinContext.class
 name\lsg\MySqlParser$CaseFuncAlternativeContext.class
+name\lsg\grammar\engine\EngineName.class
 name\lsg\MySqlParser$ChangeMasterContext.class
 name\lsg\MySqlParser$AdministrationStatementContext.class
 name\lsg\MySqlParser$AlterByForceContext.class
@@ -477,6 +482,7 @@ name\lsg\MySqlParser$PrimaryKeyTableConstraintContext.class
 name\lsg\MySqlParser$SubqueryExpessionAtomContext.class
 name\lsg\MySqlParser$RenameUserContext.class
 name\lsg\grammar\definition\CreateDefinition.class
+name\lsg\grammar\model\EngineEnum.class
 name\lsg\MySqlParser$IndexTypeContext.class
 name\lsg\MySqlParser$EnableTypeContext.class
 name\lsg\MySqlParser$KillStatementContext.class
@@ -568,6 +574,7 @@ name\lsg\MySqlParser$TableSourceContext.class
 name\lsg\utils\FileUtil.class
 name\lsg\MySqlParser$LengthOneDimensionContext.class
 name\lsg\MySqlParser$UpdateStatementContext.class
+name\lsg\grammar\definition\CharsetNameBase.class
 name\lsg\MySqlParser$TableOptionContext.class
 name\lsg\MySqlParser$CreateEventContext.class
 name\lsg\MySqlParser$DropFunctionContext.class
