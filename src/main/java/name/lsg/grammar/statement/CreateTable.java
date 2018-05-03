@@ -2,6 +2,7 @@ package name.lsg.grammar.statement;
 
 import name.lsg.grammar.AST;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,8 @@ public class CreateTable extends DDLStatement {
     private boolean ifNotExists=false;
     AST name;
     List<AST> createDefinitionList;
+    List<AST> tableOptionList = new ArrayList<>();
+
 
     public AST getName() {
         return name;
@@ -36,6 +39,10 @@ public class CreateTable extends DDLStatement {
 
     public List<AST> getCreateDefinitionList(){
         return this.createDefinitionList;
+    }
+
+    public void addTableOption(AST option){
+        tableOptionList.add(option);
     }
 
 

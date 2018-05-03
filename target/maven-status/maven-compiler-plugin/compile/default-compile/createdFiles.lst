@@ -152,6 +152,7 @@ name\lsg\MySqlParser$ShowGlobalInfoContext.class
 name\lsg\MySqlParser$DefiniteTablePrivLevelContext.class
 name\lsg\MySqlParser$SelectElementContext.class
 name\lsg\MySqlParser$ConnectionOptionContext.class
+name\lsg\grammar\definition\TableOption.class
 name\lsg\MySqlParser$ShowLogEventsContext.class
 name\lsg\MySqlParser$FunctionNameBaseContext.class
 name\lsg\MySqlParser$SetPasswordContext.class

@@ -201,20 +201,20 @@ createServer
 
 createTable returns [CreateTable value]
     @init{ $value = new CreateTable();  }
-    : CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists $value.markAsIfNotExists();)?
+    : CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
        tableName 
        (
          LIKE tableName 
          | '(' LIKE parenthesisTable=tableName ')' 
        )                                                            #copyCreateTable
-    | CREATE TEMPORARY? TABLE ifNotExists? 
+    | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
        tableName createDefinitions?
-       ( tableOption (','? tableOption)* )?
+       ( t=tableOption { /*$value.addTableOption($t.value);*/ } (','? t=tableOption { /* $value.addTableOption($t.value);*/ })* )?
        partitionDefinitions? keyViolate=(IGNORE | REPLACE)?
        AS? selectStatement                                          #queryCreateTable
-    | CREATE TEMPORARY? TABLE ifNotExists?
-       t=tableName { $value.setName($t.value); } def=createDefinitions { $value.setCreateDefinitionList($def.value);}
-       ( tableOption (','? tableOption)* )?
+    | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
+       t=tableName { $value.setName($t.value); } def=createDefinitions { $value.setCreateDefinitionList($def.value); }
+       (to=tableOption { $value.addTableOption($to.value); } (','? to=tableOption { $value.addTableOption($to.value);  } )* )?
        partitionDefinitions?                                        #columnCreateTable
     ;
 
@@ -420,7 +420,7 @@ indexColumnDefinition returns [IndexColumnDefinition value]
       indexColumnNames indexOption*                                // #specialIndexDeclaration
     ;
 
-tableOption
+tableOption  returns [AST value]
     : ENGINE '='? engineName                                        #tableOptionEngine
     | AUTO_INCREMENT '='? decimalLiteral                            #tableOptionAutoIncrement
     | AVG_ROW_LENGTH '='? decimalLiteral                            #tableOptionAverage
