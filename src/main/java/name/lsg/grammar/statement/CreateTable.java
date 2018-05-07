@@ -16,6 +16,26 @@ public class CreateTable extends DDLStatement {
     List<AST> createDefinitionList;
     List<AST> tableOptionList = new ArrayList<>();
 
+    CreateType createType = CreateType.COLUMN;
+
+    private enum CreateType{
+        COPY(1),
+        QUERY(2),   //calls constructor with value 1
+        COLUMN(3); // semicolon needed when fields / methods follow
+
+        private final int type;
+
+        private CreateType(int type) {
+            this.type = type;
+        }
+
+        public int getValue() {
+            return this.type;
+        }
+    }
+
+
+
 
     public AST getName() {
         return name;
@@ -45,6 +65,18 @@ public class CreateTable extends DDLStatement {
         tableOptionList.add(option);
     }
 
+
+    public void markAsQuery(){
+        createType = CreateType.QUERY;
+    }
+
+    public void markAsCopy(){
+        createType = CreateType.COPY;
+    }
+
+    public void markAsColumn(){
+        createType = CreateType.COLUMN;
+    }
 
 
 

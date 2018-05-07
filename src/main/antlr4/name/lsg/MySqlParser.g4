@@ -205,18 +205,18 @@ createTable returns [CreateTable value]
     : CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
        tableName 
        (
-         LIKE tableName 
-         | '(' LIKE parenthesisTable=tableName ')' 
-       )                                                            #copyCreateTable
+         LIKE t=tableName { $value.setName($t.value); }
+         | '(' LIKE parenthesisTable=tableName { $value.setName($parenthesisTable.value); } ')'
+       )  {  $value.markAsCopy();  }                            #copyCreateTable
     | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
-       tableName createDefinitions?
+       t=tableName { $value.setName($t.value); } (def=createDefinitions {$value.setCreateDefinitionList($def.value);})?
        ( to=tableOption { $value.addTableOption($to.value); } (','? to=tableOption {  $value.addTableOption($to.value); })* )?
        partitionDefinitions? keyViolate=(IGNORE | REPLACE)?
-       AS? selectStatement                                          #queryCreateTable
+       AS? selectStatement   {  $value.markAsQuery();  }                   #queryCreateTable
     | CREATE (TEMPORARY { $value.markAsTemporary(); })? TABLE (ifNotExists {$value.markAsIfNotExists();})?
        t=tableName { $value.setName($t.value); } def=createDefinitions { $value.setCreateDefinitionList($def.value); }
        (to=tableOption { $value.addTableOption($to.value); } (','? to=tableOption { $value.addTableOption($to.value);  } )* )?
-       partitionDefinitions?                                        #columnCreateTable
+       partitionDefinitions?         {  $value.markAsColumn();  }               #columnCreateTable
     ;
 
 createTablespaceInnodb
@@ -458,7 +458,7 @@ tablespaceStorage
     : STORAGE (DISK | MEMORY | DEFAULT)
     ;
 
-partitionDefinitions
+partitionDefinitions returns [PartitionDefinition value]
     : PARTITION BY partitionFunctionDefinition 
       (PARTITIONS count=decimalLiteral)? 
       (

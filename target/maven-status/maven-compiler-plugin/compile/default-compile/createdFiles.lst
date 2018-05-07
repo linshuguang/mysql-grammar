@@ -167,6 +167,7 @@ name\lsg\MySqlParser$PasswordFunctionClauseContext.class
 name\lsg\MySqlParser$CreateDefinitionsContext.class
 name\lsg\MySqlParser$AlterSimpleDatabaseContext.class
 name\lsg\MySqlParser$PartitionDefinerAtomContext.class
+name\lsg\grammar\statement\CreateTable$CreateType.class
 name\lsg\MySqlParser$CommitWorkContext.class
 name\lsg\MySqlParser$LoadDataStatementContext.class
 name\lsg\MySqlParser$SetTransactionContext.class
@@ -442,6 +443,7 @@ name\lsg\MySqlParser$WeightFunctionCallContext.class
 name\lsg\MySqlParser$ExpressionsWithDefaultsContext.class
 name\lsg\MySqlParser$RenameUserClauseContext.class
 name\lsg\MySqlParser$DmlStatementContext.class
+name\lsg\grammar\definition\PartitionDefinition.class
 name\lsg\MySqlParser$UnionStatementContext.class
 name\lsg\MySqlParser$CreateUserContext.class
 name\lsg\MySqlParser$RoutineDataContext.class
